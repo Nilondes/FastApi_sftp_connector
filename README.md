@@ -129,6 +129,7 @@ bash create_files_script.sh
 ## Project structure
 
 FastApi_sftp_connector/
+
 ├── app/                   # Application core
 
 │   ├── celery_app.py      # Celery configuration

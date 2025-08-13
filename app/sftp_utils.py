@@ -13,6 +13,7 @@ def sftp_connection(host, port, username, password):
         sftp.close()
         transport.close()
 
+
 def download_file(sftp, remote_path, local_path):
     sftp.get(remote_path, local_path)
     return os.path.getsize(local_path)

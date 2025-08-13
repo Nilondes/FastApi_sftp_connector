@@ -1,6 +1,6 @@
 from app.celery_app import celery_app, engine
 from app.models import Server, File, FileStatus
-from app.sftp_utils import sftp_connection
+from app.sftp_utils import sftp_connection, download_file
 from sqlalchemy.orm import sessionmaker
 import os
 import logging
@@ -9,7 +9,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 Session = sessionmaker(bind=engine)
-
 
 
 @celery_app.task(name='app.tasks.scan_servers')
@@ -100,8 +99,7 @@ def download_sftp_file(self, server_id, filename):
         ) as sftp:
             remote_path = os.path.join(server.remote_path, filename)
             logger.info(f"Downloading {remote_path} to {local_path}")
-            sftp.get(remote_path, local_path)
-            file_size = os.path.getsize(local_path)
+            file_size = download_file(sftp, remote_path, local_path)
             logger.info(f"Downloaded {filename} ({file_size} bytes)")
             logger.info(f"Full local path: {os.path.abspath(local_path)}")
 

@@ -1,14 +1,11 @@
-from app.celery_app import celery_app, engine
+from app.celery_app import celery_app, engine, SessionLocal as Session
 from app.models import Server, File, FileStatus
 from app.sftp_utils import sftp_connection, download_file
-from sqlalchemy.orm import sessionmaker
 import os
 import logging
 
 
 logger = logging.getLogger(__name__)
-
-Session = sessionmaker(bind=engine)
 
 
 @celery_app.task(name='app.tasks.scan_servers')
